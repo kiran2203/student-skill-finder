@@ -11,46 +11,77 @@
             padding: 0;
             background-color: #f4f4f4;
         }
+
         .container {
-            width: 80%;
-            margin: 0 auto;
+            max-width: 900px;
+            margin: 50px auto;
             padding: 20px;
-        }
-        h1 {
-            text-align: center;
-        }
-        form, .search-results {
-            background-color: #fff;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 5px;
+            background-color: white;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        input[type="text"], input[type="email"] {
+
+        h1, h2 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="email"] {
             width: 100%;
             padding: 10px;
-            margin: 10px 0;
+            margin-bottom: 20px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
         }
-        input[type="submit"], button {
+
+        input[type="submit"] {
+            padding: 10px 20px;
             background-color: #28a745;
             color: white;
-            padding: 10px 20px;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
+            font-size: 16px;
             cursor: pointer;
         }
-        button {
-            background-color: #007bff;
+
+        input[type="submit"]:hover {
+            background-color: #218838;
         }
+
+        .search-results {
+            margin-top: 30px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
+
         table, th, td {
-            border: 1px solid black;
-            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
@@ -108,7 +139,7 @@
             };
 
             // Send the student data to the server
-            const response = await fetch('http://localhost:3000/api/students', {
+            const response = await fetch('/api/students', {  // Change the URL here
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -129,7 +160,7 @@
             const searchQuery = document.getElementById('searchSkill').value;
 
             // Fetch students matching the skill
-            const response = await fetch(`http://localhost:3000/api/students?skill=${searchQuery}`);
+            const response = await fetch(`/api/students?skill=${searchQuery}`);  // Change the URL here
             const students = await response.json();
 
             const tableBody = document.getElementById('resultsTable').querySelector('tbody');
