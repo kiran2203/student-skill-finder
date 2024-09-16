@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -5,7 +6,6 @@ const cors = require('cors');
 const path = require('path');
 
 const app = express();
-const port = 3000;
 
 // Middleware
 app.use(bodyParser.json());
@@ -61,6 +61,7 @@ app.get('*', (req, res) => {
 });
 
 // Start the server
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
