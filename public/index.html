@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Skill Finder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form, .search-results {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="submit"], button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button {
+            background-color: #007bff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Student Skill Finder</h1>
+
+        <!-- Form to add new student -->
+        <form id="studentForm">
+            <h2>Enter Your Details</h2>
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="skill">Skill Set</label>
+            <input type="text" id="skill" name="skill" required>
+            
+            <label for="contact">Contact Details (Email)</label>
+            <input type="email" id="contact" name="contact" required>
+            
+            <input type="submit" value="Add Student">
+        </form>
+
+        <!-- Search section -->
+        <form id="searchForm">
+            <h2>Search for Skills</h2>
+            <label for="searchSkill">Enter skill to search</label>
+            <input type="text" id="searchSkill" required>
+            <input type="submit" value="Search">
+        </form>
+
+        <!-- Display search results -->
+        <div class="search-results" id="searchResults">
+            <h2>Search Results</h2>
+            <table id="resultsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Skill Set</th>
+                        <th>Contact</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('studentForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const student = {
+                name: document.getElementById('name').value,
+                skill: document.getElementById('skill').value,
+                contact: document.getElementById('contact').value
+            };
+
+            // Send the student data to the server
+            const response = await fetch('http://localhost:3000/api/students', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(student)
+            });
+
+            if (response.ok) {
+                alert('Student added successfully');
+                document.getElementById('studentForm').reset();
+            } else {
+                alert('Error adding student');
+            }
+        });
+
+        document.getElementById('searchForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const searchQuery = document.getElementById('searchSkill').value;
+
+            // Fetch students matching the skill
+            const response = await fetch(`http://localhost:3000/api/students?skill=${searchQuery}`);
+            const students = await response.json();
+
+            const tableBody = document.getElementById('resultsTable').querySelector('tbody');
+            tableBody.innerHTML = '';  // Clear previous results
+
+            students.forEach(student => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${student.name}</td>
+                    <td>${student.skill}</td>
+                    <td>${student.contact}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        });
+    </script>
+</body>
+</html>
